@@ -64,9 +64,21 @@ class Reader:
     def __del__(self):
         self.close()
 
+
 class Formatter:
     def __init__(self):
         self.formatted_message = ""
+
+    def _get_year_word(self, age: int) :
+        if 11 <= age % 100 <= 19:
+            return "лет"
+        last_digit = age % 10
+        if last_digit == 1:
+            return "год"
+        elif 2 <= last_digit <= 4:
+            return "года"
+        else:
+            return "лет"
 
     def format_customer(self, data: Customer):
         name = data.get_name()
@@ -90,14 +102,16 @@ class Formatter:
             'tablet': 'планшетного',
             '': 'неизвестного'
         }
+
         device_text = device_map.get(device, device)
 
+        year_word = self._get_year_word(int(age))
 
         self.formatted_message = (
-            f"Пользователь {name} {gender_text}, {age} лет "
+            f"Пользователь {name} {gender_text}, {age} {year_word} "
             f"{action_word} покупку на {bill} у.е. с {device_text} "
             f"браузера {browser}. Регион, из которого совершалась покупка: {region}."
-            )
+        )
 
     def get_formatted_message(self):
         return self.formatted_message
